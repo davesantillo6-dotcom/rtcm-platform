@@ -1,0 +1,107 @@
+RTCM Platform — Business Model and Go-to-Market Strategy 
+Document Version: 1.0
+Last Updated: June 15, 2026
+Author: David Santillo, CPA — Founder, RTCM Platform LLC
+
+1. Business Model Overview
+
+RTCM Platform LLC operates as a cloud-native Software-as-a-Service (SaaS) business. Revenue is generated through recurring annual and monthly subscription contracts, priced by the number of legal entities monitored and the feature tier selected. There are no per-user fees — pricing is entity-based, reflecting how mid-market finance teams actually operate: a single Controller or CFO is responsible for multiple entities simultaneously.
+RTCM's cost structure is favorable for scale: the core control evaluation engine, database infrastructure, and ERP connectors are built once and serve unlimited clients. Marginal cost per additional client is low, creating strong operating leverage as the customer base grows.
+
+2. Target Market
+
+RTCM is purpose-built for three primary customer segments:
+
+2.1 Private Equity-Backed Portfolio Companies
+Private equity firms managing three or more portfolio companies face a systemic challenge: each portfolio company has its own ERP, its own finance team, and its own control environment — but the PE sponsor has no real-time visibility into control health across the portfolio. RTCM solves this at both the portfolio company level (entity-level monitoring) and the portfolio level (consolidated dashboard across all entities).
+Estimated addressable market: Approximately 8,000 PE-backed U.S. companies with $10M–$500M in revenue (PitchBook, 2024).
+
+2.2 Mid-Market Private Companies Preparing for Audit or Transaction
+Companies preparing for their first external audit, a strategic sale, or an initial public offering need to demonstrate internal control maturity. RTCM compresses the timeline for achieving audit-ready control documentation from 12–18 months of manual effort to continuous, automated monitoring.
+Estimated addressable market: Approximately 180,000 U.S. companies with $10M–$500M in revenue (U.S. Census Bureau, Statistics of U.S. Businesses, 2022).
+
+2.3 CPA Firms and Outsourced CFO Providers
+
+Regional CPA firms and fractional CFO service providers serve hundreds of mid-market clients each. RTCM's white-label partner program enables these firms to deliver automated control monitoring as a managed service — creating a recurring revenue stream for the firm while dramatically expanding RTCM's distribution without a proportional increase in sales cost.
+Estimated addressable market: Approximately 44,000 U.S. CPA firms with at least one mid-market client (AICPA, 2023).
+
+3. Pricing Model
+
+RTCM pricing is structured around three subscription tiers, each priced per legal entity per month:
+
+Tier 1 — Starter
+Target: Single-entity companies or small multi-entity organizations (1–3 entities)
+Price: $499 per entity per month (billed annually) / $599 month-to-month
+Includes:
+GL monitoring (15 controls)
+Reconciliation tracking
+Basic alert dashboard
+QuickBooks Online connector
+Email alert notifications
+Up to 5 users
+
+Tier 2 — Professional
+Target: Mid-market multi-entity organizations (4–15 entities)
+Price: $349 per entity per month (billed annually) / $419 month-to-month
+Includes everything in Starter, plus:
+
+Full control library (40+ controls)
+Segregation of Duties analyzer
+Intercompany monitor
+NetSuite and Sage Intacct connectors
+Webhook integrations
+Audit export package
+Unlimited users
+
+Tier 3 — Enterprise
+Target: PE portfolio platforms, large multi-entity consolidators (16+ entities)
+Price: Custom — annual contract, negotiated based on entity count and feature scope
+Includes everything in Professional, plus:
+ML-powered anomaly detection
+Narrative Intelligence module (AI-assisted control documentation)
+CPA firm white-label option
+Dedicated implementation support
+SLA with uptime guarantee
+SOC 2 Type II audit report access
+
+Partner Program (CPA Firms)
+
+CPA firm partners receive a 30% revenue share on all clients referred and managed through the partner portal. Partners receive access to a white-labeled version of the platform branded under their firm name, with RTCM branding removed from client-facing materials.
+
+4. Revenue Projections
+
+The following projections are based on conservative assumptions: a 12-month sales cycle for enterprise accounts, an 18-month ramp to first commercial revenue, and a focus on Professional tier clients in Year 1.
+PeriodClientsAvg. Entities/ClientMRRARRQ4 2026 (pilot)2–3 (no-cost pilots)6$0$0Q2 2027 (launch)5 paying clients5 entities~$8,750~$105,000Q4 202715 paying clients6 entities~$31,500~$378,000Q2 202835 paying clients8 entities~$97,720~$1,172,640Q4 202860 paying clients8 entities~$167,520~$2,010,240
+These projections assume the Professional tier at $349/entity/month. Enterprise accounts and CPA firm partner revenue are additive and not included above.
+Path to $1M ARR: Approximately 35 clients averaging 8 entities each at Professional tier pricing. This is achievable within 18 months of commercial launch based on comparable B2B SaaS benchmarks in the accounting technology sector.
+
+5. Go-to-Market Strategy
+
+Phase 1 — Direct Outreach (Q4 2026)
+During the development phase, Mr. Santillo will leverage his professional network — Deloitte alumni, PE operating partners, UFT network contacts, and CPA firm relationships — to identify 2–3 pilot clients willing to participate in a no-cost pilot program in exchange for structured product feedback.
+Target pilot profile: PE-backed company with 4–12 entities on QuickBooks or NetSuite, with an existing Controller or Director of Accounting who can serve as internal champion.
+
+Phase 2 — CPA Firm Channel (Q1–Q2 2027)
+CPA firms represent the most capital-efficient distribution channel for RTCM. A single regional firm serving 30 mid-market clients can deliver 30 potential RTCM subscribers through one partnership agreement. The partner program will be launched alongside general availability, targeting 2 initial firm partners in Q1 2027 and expanding to 10 by Q4 2027.
+Phase 3 — Direct Digital and Content (Q2 2027 onward)
+The rtcmplatform.com waitlist and demo request infrastructure will be supported by a content marketing program targeting finance leaders at PE-backed organizations: blog posts, LinkedIn content, and contributed articles in publications such as Accounting Today, CFO Magazine, and Private Equity Wire addressing the mid-market internal control gap.
+Phase 4 — PE Sponsor Relationships (Q3 2027 onward)
+The highest-leverage distribution path is a relationship with a private equity sponsor: a single PE firm with 10+ portfolio companies becomes a potential RTCM enterprise contract covering all portfolio entities. Mr. Santillo's existing relationships in the PE-backed company ecosystem position RTCM to pursue these relationships as the product matures.
+
+6. Competitive Positioning
+
+SolutionPrice PointBuilt for Mid-MarketMulti-EntityReal-TimeRTCM$349–$499/entity/moYesYesYesAuditBoard$50,000+/yrNo (enterprise)LimitedNoWorkiva$40,000+/yrNo (enterprise)LimitedNoSAP GRC$100,000+/yrNo (enterprise)YesPartialManual / Spreadsheet$0DefaultPainfulNo
+RTCM's competitive moat is the combination of mid-market price accessibility, multi-entity architecture, and real-time control evaluation — a combination that does not exist in any current product on the market.
+
+7. Financial Support and Capitalization Plan
+
+RTCM Platform LLC is currently self-funded by Mr. Santillo. The initial capitalization of $1,000 covers early operating costs. The platform's development is being advanced using available tools and resources during the pre-revenue phase, with the expectation that:
+
+Pilot revenue (Q4 2026) will fund early infrastructure costs
+Seed fundraising (Q2–Q3 2027) will be initiated following the first 5 paying customers, targeting $500,000–$1,000,000 to fund engineering hires, marketing, and SOC 2 certification
+Series A (2028) will follow achievement of $1M ARR
+The business is designed to reach first commercial revenue within 12 months of this document's publication without external capital, making the seed round an accelerant rather than a prerequisite.
+
+
+
+This document is a living business plan and will be updated as development progresses and market feedback is incorporated. Last reviewed June 15, 2026.
