@@ -1,14 +1,40 @@
+# RTCM Platform
+
+**Real-Time Control Monitoring for U.S. Mid-Market and Private Equity-Backed Organizations**
+
+Built by David Santillo, CPA | Founder, RTCM Platform LLC  
+[rtcmplatform.com](https://www.rtcmplatform.com) | david@rtcmplatform.com
+
+---
+
+## Development Status
+
+| Milestone | Status |
+|-----------|--------|
+| LLC formation and EIN |  Complete — May 26, 2026 |
+| Initial platform architecture |  Complete — May 26, 2026 |
+| Control evaluation engine (GL-001, GL-002, GL-003) |  Complete — May 26, 2026 |
+| QuickBooks Online connector |  Complete — May 26, 2026 |
+| Business model and go-to-market strategy |  Complete — June 21, 2026 |
+| Extended GL controls (GL-004, GL-005) |  Complete — June 28, 2026 |
+| Unit test suite — extended GL controls |  Complete — July 5, 2026 |
+| SOD controls (SOD-001, SOD-002) |  In progress — July 2026 |
+| Intercompany controls (IC-001, IC-002) |  Planned — September 2026 |
+| Reconciliation controls (REC-001, REC-002) |  Planned — November 2026 |
+| Pilot program launch |  Planned — Q4 2026 |
+| General availability |  Planned — Q2 2027 |
+
+---
+
 ## The Problem
 
-The United States has a significant and documented gap in financial reporting integrity at the mid-market level. While large public companies subject to Sarbanes-Oxley (SOX) Section 404 deploy extensive internal control frameworks monitored by Big 4 audit firms, the estimated **28 million U.S. small and mid-sized businesses** — including thousands of private equity-backed companies — operate with little to no real-time visibility into control failures.
+The United States has a significant and documented gap in financial reporting integrity at the mid-market level. While large public companies subject to Sarbanes-Oxley (SOX) Section 404 deploy extensive internal control frameworks monitored by Big 4 audit firms, the estimated 28 million U.S. small and mid-sized businesses — including thousands of private equity-backed companies — operate with little to no real-time visibility into control failures.
 
 The consequences are measurable:
-- The ACFE estimates U.S. organizations lose **5% of annual revenue** to fraud, totaling over **$4.7 trillion annually**
-- The SEC imposed **$6.4 billion in enforcement actions** in FY2023 alone, a significant portion tied to control failures at non-accelerated filers
-- Financial restatements at private and mid-market companies increased **18% from 2019–2023**, driven primarily by control deficiencies that manual quarterly reviews failed to detect
-- Private equity portfolio companies — which collectively employ millions of Americans — lack the infrastructure to detect control breakdowns between annual audits
 
-Existing solutions are designed for large enterprises (SAP GRC, AuditBoard, Workiva) and carry price points and implementation costs that make them inaccessible to mid-market organizations. No purpose-built, affordable, cloud-native platform currently serves this segment.
+- The ACFE estimates U.S. organizations lose 5% of annual revenue to fraud
+- Private equity portfolio companies — which collectively employ millions of Americans — lack the infrastructure to detect control breakdowns between annual audits
+- Existing solutions (SAP GRC, AuditBoard, Workiva) are designed for large enterprises and carry price points inaccessible to mid-market organizations
 
 **RTCM exists to close that gap.**
 
@@ -16,56 +42,71 @@ Existing solutions are designed for large enterprises (SAP GRC, AuditBoard, Work
 
 ## The Solution
 
-RTCM is a cloud-native SaaS platform that provides **continuous, automated monitoring of internal controls** — the financial checks and processes that ensure accurate reporting — for companies that currently rely on periodic, manual review.
+RTCM is a cloud-native SaaS platform that provides continuous, automated monitoring of internal controls for companies that currently rely on periodic, manual review.
 
-The platform ingests data from general ledger systems (QuickBooks, Sage, NetSuite, SAP B1), applies rule-based and ML-augmented control tests, and surfaces anomalies, exceptions, and control failures to finance leaders in real time — not months later during an annual audit.
+The platform ingests data from general ledger systems (QuickBooks Online, NetSuite, Sage Intacct, SAP B1), applies rule-based control tests mapped to the COSO Internal Control — Integrated Framework (2013), and surfaces control failures to finance leaders in real time — not months later during an annual audit.
 
-### Core Capabilities
+### Core Modules
 
 | Module | Description |
 |--------|-------------|
-| **GL Monitor** | Continuous journal entry surveillance: unusual posting times, round-dollar entries, override detection, segregation of duties violations |
-| **Account Reconciliation Engine** | Automated month-end reconciliation with variance flagging and aging analysis |
-| **Intercompany Control Suite** | Multi-entity elimination monitoring and intercompany out-of-balance detection |
-| **User Access & Segregation Monitor** | Real-time SoD (Segregation of Duties) conflict detection across ERP roles |
-| **Narrative Intelligence** | AI-assisted control narrative generation and documentation — maps actual system behavior to stated control language |
-| **Audit Trail Manager** | Immutable log management with exception tagging for auditor export |
-| **Executive Dashboard** | CFO/Audit Committee-facing risk heatmaps, trend analysis, and period-over-period comparison |
+| **GL Monitor** | Continuous journal entry surveillance: self-approval, backdated entries, after-hours posting, round-dollar entries, unsupported top-side entries |
+| **SoD Analyzer** | Real-time Segregation of Duties conflict detection across ERP user roles |
+| **Reconciliation Engine** | Automated month-end reconciliation tracking with overdue flagging and open item analysis |
+| **Intercompany Monitor** | Multi-entity intercompany balance monitoring and elimination mapping verification |
+| **Executive Dashboard** | CFO and Controller-facing control health dashboard with entity-level status, real-time alert feed, 90-day trend analysis, and period-close checklist |
+| **Audit Trail Manager** | Immutable exception log with auditor export capability |
+
+---
+
+## Implemented Controls — Current Build
+
+### GL Monitoring
+| Control ID | Name | Severity | Status |
+|------------|------|----------|--------|
+| GL-001 | After-hours entry | High |  Implemented |
+| GL-002 | Round dollar entry | Medium |  Implemented |
+| GL-003 | Self-approval | Critical |  Implemented |
+| GL-004 | Backdated entry to prior period | High |  Implemented |
+| GL-005 | Large unsupported top-side entry | Critical |  Implemented |
+
+### Segregation of Duties
+| Control ID | Name | Severity | Status |
+|------------|------|----------|--------|
+| SOD-001 | AP entry + payment release, same user | Critical |  In progress |
+| SOD-002 | AR posting + cash receipt, same user | Critical |  In progress |
+
+### Intercompany
+| Control ID | Name | Severity | Status |
+|------------|------|----------|--------|
+| IC-001 | Intercompany pair out of balance | Critical |  Planned — Q4 2026 |
+| IC-002 | No elimination mapping | High |  Planned — Q4 2026 |
+
+### Reconciliation
+| Control ID | Name | Severity | Status |
+|------------|------|----------|--------|
+| REC-001 | Account reconciliation overdue | High |  Planned — Q4 2026 |
+| REC-002 | Unexplained reconciling item | High |  Planned — Q4 2026 |
 
 ---
 
 ## Architecture Overview
-┌─────────────────────────────────────────────────────────────────┐
-│                        RTCM Platform                            │
-├─────────────────┬───────────────────┬───────────────────────────┤
-│   Data Layer    │  Processing Layer  │     Presentation Layer    │
-├─────────────────┼───────────────────┼───────────────────────────┤
-│                 │                   │                           │
-│  ERP Connectors │  Control Engine   │  Web Dashboard (React)    │
-│  ─ QuickBooks   │  ─ Rule Evaluator │  ─ CFO View               │
-│  ─ NetSuite     │  ─ ML Anomaly Det.│  ─ Controller View        │
-│  ─ Sage Intacct │  ─ SoD Analyzer   │  ─ Auditor Export View    │
-│  ─ SAP B1       │  ─ Threshold Mgr  │                           │
-│  ─ Generic CSV  │                   │  API Layer (REST/GraphQL)  │
-│                 │  Alert Engine     │  ─ Webhook notifications   │
-│  Data Warehouse │  ─ Priority Queue │  ─ Third-party integr.    │
-│  (PostgreSQL +  │  ─ Routing Rules  │  ─ Audit firm data export  │
-│   TimescaleDB)  │  ─ Notification   │                           │
-│                 │    Dispatcher     │                           │
-└─────────────────┴───────────────────┴───────────────────────────┘
-
-See [`/docs/architecture.md`](docs/architecture.md) for full technical specification.
-
----
+Full architecture specification: [docs/architecture.md](docs/architecture.md)
 
 ## Target Market
 
-RTCM is purpose-built for:
+RTCM is purpose-built for three customer segments:
 
-- **Private equity portfolio companies** — PE-backed businesses that need audit-ready control documentation across multiple entities and fiscal years
-- **Mid-market private companies** ($10M–$500M revenue) preparing for an IPO, acquisition, or first external audit
-- **Multi-entity consolidators** — regional distributors, service platforms, and roll-up organizations managing 3–20 legal entities under a single finance team
-- **CPA firms and outsourced CFO providers** — firms serving mid-market clients who want automated monitoring delivered as a managed service
+**1. Private Equity Portfolio Companies**
+PE firms managing multiple portfolio companies need real-time control visibility across their entire portfolio — not a once-a-year audit finding. RTCM provides a consolidated dashboard showing control health across every entity simultaneously.
+
+**2. Mid-Market Companies Preparing for Audit or Transaction**
+Companies approaching their first external audit, a strategic sale, or an IPO need to demonstrate internal control maturity quickly. RTCM compresses the timeline for achieving audit-ready control documentation from months to weeks.
+
+**3. CPA Firms and Outsourced CFO Providers**
+Regional CPA firms serving mid-market clients can offer RTCM as a managed service through the white-label partner program — creating a recurring revenue stream while expanding RTCM's reach.
+
+Full target market analysis: [docs/business-model.md](docs/business-model.md)
 
 ---
 
@@ -73,83 +114,49 @@ RTCM is purpose-built for:
 
 The integrity of U.S. financial markets depends on accurate financial reporting at every level of the economy — not just at Fortune 500 companies. Mid-market businesses represent the backbone of the U.S. economy:
 
-- **48% of U.S. GDP** is generated by companies with fewer than 500 employees (SBA, 2023)
-- **61.7 million Americans** are employed by small and mid-sized businesses
-- Private equity-backed companies alone employ an estimated **12 million Americans** across thousands of portfolio companies
+- 43.5% of U.S. GDP is generated by small and mid-sized businesses (SBA Office of Advocacy, 2026)
+- 62.3 million Americans are employed by small and mid-sized businesses
+- Private equity-backed companies alone employ an estimated 12 million Americans across thousands of portfolio companies
 
-When control failures go undetected at these companies, the downstream consequences include investor losses, lender defaults, employee layoffs, tax revenue shortfalls, and erosion of confidence in private capital markets. RTCM addresses this as infrastructure — not a product — for a healthier national financial ecosystem.
-
----
-
-## Technical Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Backend API | Python (FastAPI) |
-| Data Processing | Apache Kafka, dbt, Pandas |
-| Database | PostgreSQL, TimescaleDB (time-series) |
-| ML/Anomaly Detection | scikit-learn, Isolation Forest, LSTM |
-| Frontend | React + TypeScript, Recharts |
-| Infrastructure | AWS (ECS, RDS, S3, CloudWatch) |
-| Auth | Auth0 (RBAC with entity-level scoping) |
-| CI/CD | GitHub Actions |
-
----
-
-## Repository Structure
-rtcm-platform/
-├── docs/
-│   ├── architecture.md          # Full system architecture
-│   ├── data-model.md            # Entity-relationship diagram and schema
-│   ├── api-spec.md              # REST API specification
-│   ├── control-library.md       # Control test definitions and COSO mapping
-│   └── roadmap.md               # Development phases and milestones
-├── src/
-│   ├── api/                     # FastAPI application
-│   ├── core/
-│   │   ├── control_engine/      # Rule evaluation and control testing
-│   │   ├── anomaly_detection/   # ML-based GL surveillance
-│   │   └── sod_analyzer/        # Segregation of duties analysis
-│   ├── integrations/
-│   │   ├── quickbooks/          # QuickBooks Online connector
-│   │   ├── netsuite/            # NetSuite SuiteAnalytics connector
-│   │   └── sage/                # Sage Intacct connector
-│   └── ui/                      # React frontend application
-├── tests/
-│   ├── unit/
-│   └── integration/
-└── .github/
-└── workflows/               # CI/CD pipeline definitions
+When control failures go undetected at these companies, the downstream consequences include investor losses, lender defaults, employee layoffs, and erosion of confidence in private capital markets.
 
 ---
 
 ## Development Roadmap
 
-See [`/docs/roadmap.md`](docs/roadmap.md) for full milestone detail.
+| Phase | Timeline | Key Deliverables |
+|-------|----------|-----------------|
+| Phase 1 | Q3 2026 | QuickBooks connector, GL controls (GL-001 through GL-005), SoD controls, unit test suite |
+| Phase 2 | Q4 2026 | IC controls, REC controls, pilot program launch (2–3 clients) |
+| Phase 3 | Q1 2027 | NetSuite connector, full web dashboard, alert notification system |
+| Phase 4 | Q2 2027 | General availability, CPA firm white-label program, first commercial revenue |
 
-**Phase 1 — Foundation (Q3 2026):** Core data ingestion, GL Monitor, basic dashboard
-**Phase 2 — Control Engine (Q4 2026):** Full control library, SoD analyzer, reconciliation engine
-**Phase 3 — Intelligence Layer (Q1 2027):** ML anomaly detection, Narrative Intelligence module
-**Phase 4 — Market Launch (Q2 2027):** Pilot client onboarding, CPA firm partnerships
+Full roadmap with 36 specific milestones: [docs/roadmap.md](docs/roadmap.md)
 
 ---
 
 ## Founder
 
-**David Santillo, CPA**
-Director of Accounting — United Flow Technologies (UFT)
-*Former Big 4 audit experience | 10+ years U.S. GAAP financial reporting and multi-entity consolidation*
+**David Santillo, CPA**  
+Founder, RTCM Platform LLC  
+Director of Accounting — United Flow Technologies
 
-David designed RTCM from direct experience managing internal controls across a 10+ entity, private equity-backed platform. The control gaps RTCM addresses are not theoretical — they are problems he has observed and worked around throughout his career in mid-market finance.
-
----
-
-## Contact & Partnerships
-
-For pilot program inquiries, CPA firm partnerships, or investor discussions:
-📧 david@rtcmplatform.com
-🌐 rtcmplatform.com *(coming soon)*
+David designed RTCM from direct experience managing internal controls across a 20+ entity, private equity-backed platform. The control gaps RTCM addresses are not theoretical — they are problems he has identified, documented, and worked to remediate throughout his career spanning Big 4 audit practice and industry leadership roles in mid-market finance.
 
 ---
 
-*RTCM is proprietary software under active development. All rights reserved. © 2026 RTCM LLC.*
+## Early Access — Pilot Program
+
+RTCM is currently accepting applications for the pilot program launching Q4 2026. Pilot participants receive full Professional-tier access at no cost in exchange for structured product feedback.
+
+**Apply:** [rtcmplatform.com](https://www.rtcmplatform.com) → Request a Demo  
+**Contact:** david@rtcmplatform.com
+
+---
+
+*RTCM Platform LLC — Texas LLC — EIN 42-2778352*  
+*© 2026 RTCM Platform LLC. All rights reserved.*
+
+
+
+
