@@ -1,0 +1,361 @@
+"""
+RTCM — Segregation of Duties Control Implementations
+
+SOD-001: AP entry and payment release — same user
+SOD-002: AR posting and cash receipt — same user
+
+Author: David Santillo, CPA — Founder, RTCM Platform LLC
+"""
+
+from __future__ import annotations
+from dataclasses import dataclass
+from typing import Optional, List
+
+from src.core.control_engine.engine import (
+    BaseControl, ControlEvaluationResult, ControlResult,
+    COSOCategory, ControlTrigger, Severity, JournalEntry
+)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Segregation of Duties Data Model
+# ─────────────────────────────────────────────────────────────────────────────
+
+@dataclass
+class UserTransaction:
+    """
+    Represents a financial transaction with full user attribution —
+    the user who initiated it and the user who authorized or released it.
+
+    In a properly controlled environment these should always be
+    different individuals. When they are the same person, the
+    organization has a segregation of duties failure: one individual
+    can both create and approve a transaction, eliminating the
+    independent check that prevents errors and fraud.
+    """
+    transaction_id: str
+    tenant_id: str
+    entity_id: str
+    transaction_type: str        # "ap_invoice", "ap_payment", "ar_invoice",
+                                 # "ar_receipt", etc.
+    initiated_by_user_id: str    # User who created / entered the transaction
+    released_by_user_id: Optional[str]  # User who approved / released it
+    amount: float
+    vendor_or_customer_id: Optional[str]
+    reference: Optional[str]
+    source_system: str           # ERP identifier
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SOD-001: AP Entry + Payment Release — Same User
+# ─────────────────────────────────────────────────────────────────────────────
+
+class APSoDControl(BaseControl):
+    """
+    SOD-001: Flags transactions where the same user both entered an
+    accounts payable invoice and released the associated payment.
+
+    Segregation of duties in the AP cycle is one of the most fundamental
+    internal controls in any organization. The purpose is straightforward:
+    if one person can both create a payable (say, to a vendor they control)
+    and release the payment for that payable, they can direct company funds
+    to unauthorized parties without any independent review.
+
+    The three-way separation that best-practice AP controls require is:
+      1. Invoice entry — the person who records the liability
+      2. Invoice approval — the person who confirms the liability is valid
+      3. Payment release — the person who authorizes the cash disbursement
+
+    In mid-market organizations, the full three-way separation is often
+    not achievable given team size. RTCM therefore focuses on the most
+    critical single failure: the same individual performing both entry
+    (step 1) and payment release (step 3) — eliminating any independent
+    check on the validity of the disbursement.
+
+    This control is among the most commonly cited findings in ICOFR
+    assessments at private equity-backed companies, particularly at
+    newly acquired entities where ERP user permissions have been set up
+    quickly without a formal role-based access review.
+
+    COSO: Control Activities
+    Severity: Critical
+    """
+    control_id = "SOD-001"
+    control_name = "AP entry and payment release — same user"
+    coso_category = COSOCategory.CONTROL_ACTIVITIES
+    trigger = ControlTrigger.TRANSACTION
+    default_severity = Severity.CRITICAL
+    pcaob_relevant = True
+
+    def evaluate(
+        self,
+        data: UserTransaction,
+        tenant_id: str,
+        entity_id: str,
+    ) -> ControlEvaluationResult:
+        """
+        Evaluate whether the AP entry user and payment release user
+        are the same individual.
+
+        Args:
+            data: The transaction being evaluated.
+            tenant_id: The tenant identifier.
+            entity_id: The entity identifier.
+        """
+        # Only evaluate AP payment transactions
+        if data.transaction_type not in ("ap_payment", "ap_invoice_payment"):
+            return self._base_result(
+                tenant_id, entity_id,
+                result=ControlResult.NOT_APPLICABLE,
+                reference_id=data.transaction_id,
+            )
+
+        # If no release user recorded, cannot evaluate
+        if not data.released_by_user_id:
+            return self._base_result(
+                tenant_id, entity_id,
+                result=ControlResult.NOT_APPLICABLE,
+                reference_id=data.transaction_id,
+            )
+
+        # Core SoD check — same user entered and released
+        if data.initiated_by_user_id == data.released_by_user_id:
+            return self._base_result(
+                tenant_id, entity_id,
+                result=ControlResult.FAIL,
+                reference_id=data.transaction_id,
+                details={
+                    "transaction_type": data.transaction_type,
+                    "initiated_by": data.initiated_by_user_id,
+                    "released_by": data.released_by_user_id,
+                    "amount": data.amount,
+                    "vendor_id": data.vendor_or_customer_id,
+                    "reference": data.reference,
+                    "source_system": data.source_system,
+                },
+                human_detail=(
+                    f"SOD failure: user '{data.initiated_by_user_id}' both "
+                    f"entered and released AP payment "
+                    f"'{data.transaction_id}' for "
+                    f"${data.amount:,.2f} to vendor "
+                    f"'{data.vendor_or_customer_id}'. "
+                    f"No independent reviewer approved this disbursement. "
+                    f"Payment should be reversed pending secondary approval."
+                ),
+            )
+
+        return self._base_result(
+            tenant_id, entity_id,
+            result=ControlResult.PASS,
+            reference_id=data.transaction_id,
+        )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SOD-002: AR Posting + Cash Receipt — Same User
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ARSoDControl(BaseControl):
+    """
+    SOD-002: Flags transactions where the same user both posted an
+    accounts receivable invoice and applied the associated cash receipt.
+
+    The AR cycle SoD failure is the revenue-side equivalent of SOD-001
+    and carries similar fraud risk, though the mechanism differs.
+    When one person can both record a receivable and apply cash against
+    it, they can:
+
+      - Record a fictitious receivable and then write it off as
+        uncollectible, concealing the original fraudulent entry
+      - Apply a customer's cash payment to a different account,
+        diverting funds while making the customer's balance appear current
+      - Lapping — a common AR fraud scheme where cash from Customer B
+        is applied to Customer A's account to conceal a theft from A,
+        then cash from Customer C covers B, and so on
+
+    None of these schemes require sophisticated manipulation — they
+    simply require that no second person reviews the relationship between
+    what was invoiced and what was collected. Segregating the AR posting
+    function from the cash application function eliminates the opportunity.
+
+    In smaller mid-market organizations, full AR SoD is often not
+    achievable. RTCM surfaces every instance where the same individual
+    performed both functions so management can make an informed decision
+    about whether compensating controls — such as supervisory review of
+    the AR aging or independent bank reconciliation — are sufficient.
+
+    COSO: Control Activities
+    Severity: Critical
+    """
+    control_id = "SOD-002"
+    control_name = "AR posting and cash receipt application — same user"
+    coso_category = COSOCategory.CONTROL_ACTIVITIES
+    trigger = ControlTrigger.TRANSACTION
+    default_severity = Severity.CRITICAL
+    pcaob_relevant = True
+
+    def evaluate(
+        self,
+        data: UserTransaction,
+        tenant_id: str,
+        entity_id: str,
+    ) -> ControlEvaluationResult:
+        """
+        Evaluate whether the AR posting user and cash receipt
+        application user are the same individual.
+
+        Args:
+            data: The transaction being evaluated.
+            tenant_id: The tenant identifier.
+            entity_id: The entity identifier.
+        """
+        # Only evaluate AR cash receipt transactions
+        if data.transaction_type not in ("ar_receipt", "ar_cash_application"):
+            return self._base_result(
+                tenant_id, entity_id,
+                result=ControlResult.NOT_APPLICABLE,
+                reference_id=data.transaction_id,
+            )
+
+        # If no release user recorded, cannot evaluate
+        if not data.released_by_user_id:
+            return self._base_result(
+                tenant_id, entity_id,
+                result=ControlResult.NOT_APPLICABLE,
+                reference_id=data.transaction_id,
+            )
+
+        # Core SoD check — same user posted and applied cash
+        if data.initiated_by_user_id == data.released_by_user_id:
+            return self._base_result(
+                tenant_id, entity_id,
+                result=ControlResult.FAIL,
+                reference_id=data.transaction_id,
+                details={
+                    "transaction_type": data.transaction_type,
+                    "initiated_by": data.initiated_by_user_id,
+                    "released_by": data.released_by_user_id,
+                    "amount": data.amount,
+                    "customer_id": data.vendor_or_customer_id,
+                    "reference": data.reference,
+                    "source_system": data.source_system,
+                },
+                human_detail=(
+                    f"SOD failure: user '{data.initiated_by_user_id}' both "
+                    f"posted AR invoice and applied cash receipt "
+                    f"'{data.transaction_id}' for "
+                    f"${data.amount:,.2f} from customer "
+                    f"'{data.vendor_or_customer_id}'. "
+                    f"Independent review of AR aging and bank deposit "
+                    f"records is recommended to confirm no lapping or "
+                    f"misapplication has occurred."
+                ),
+            )
+
+        return self._base_result(
+            tenant_id, entity_id,
+            result=ControlResult.PASS,
+            reference_id=data.transaction_id,
+        )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SoD Role Conflict Analyzer
+# ─────────────────────────────────────────────────────────────────────────────
+
+class SoDRoleConflictAnalyzer:
+    """
+    Evaluates a user's assigned ERP roles against the RTCM SoD
+    conflict matrix to identify incompatible role combinations.
+
+    While SOD-001 and SOD-002 detect SoD failures at the transaction
+    level — in real time, as they occur — this analyzer operates at
+    the user access level, identifying users whose role assignments
+    create the CONDITIONS for a SoD failure before any transaction
+    occurs.
+
+    This is the preventive complement to the detective controls above:
+    SOD-001 and SOD-002 catch failures after the fact; the role conflict
+    analyzer flags the access configuration that makes those failures
+    possible and surfaces it for remediation before damage occurs.
+
+    Usage:
+        analyzer = SoDRoleConflictAnalyzer()
+        conflicts = analyzer.evaluate_user_roles(
+            user_id="jsmith",
+            assigned_roles=["ap_entry", "ap_payment_release"],
+            tenant_id="tenant-001",
+            entity_id="entity-west",
+        )
+    """
+
+    # RTCM SoD conflict matrix — incompatible role pairs
+    # Each tuple represents two roles that should never be held
+    # by the same individual simultaneously
+    CONFLICT_MATRIX = [
+        ("ap_entry",            "ap_payment_release"),
+        ("ap_entry",            "ap_approval"),
+        ("ar_posting",          "ar_cash_application"),
+        ("ar_posting",          "ar_write_off"),
+        ("gl_journal_entry",    "gl_journal_approval"),
+        ("payroll_entry",       "payroll_approval"),
+        ("payroll_entry",       "payroll_disbursement"),
+        ("purchasing",          "receiving"),
+        ("purchasing",          "ap_approval"),
+        ("inventory_count",     "inventory_adjustment"),
+        ("user_administration", "any_financial_role"),
+        ("bank_reconciliation", "cash_disbursement"),
+    ]
+
+    def evaluate_user_roles(
+        self,
+        user_id: str,
+        assigned_roles: List[str],
+        tenant_id: str,
+        entity_id: str,
+    ) -> List[dict]:
+        """
+        Evaluate a user's assigned roles against the conflict matrix.
+
+        Returns a list of conflict findings, each containing the
+        conflicting role pair and a plain-language description of
+        the risk.
+
+        Returns an empty list if no conflicts are found.
+        """
+        conflicts = []
+        role_set = set(assigned_roles)
+
+        for role_a, role_b in self.CONFLICT_MATRIX:
+            # Handle the special "any_financial_role" wildcard
+            if role_b == "any_financial_role":
+                if role_a in role_set and len(role_set) > 1:
+                    conflicts.append({
+                        "user_id": user_id,
+                        "tenant_id": tenant_id,
+                        "entity_id": entity_id,
+                        "conflicting_roles": [role_a, "financial roles"],
+                        "severity": "Critical",
+                        "description": (
+                            f"User '{user_id}' holds the '{role_a}' role "
+                            f"alongside other financial roles. Users with "
+                            f"system administration access should not hold "
+                            f"any financial transaction roles."
+                        ),
+                    })
+            elif role_a in role_set and role_b in role_set:
+                conflicts.append({
+                    "user_id": user_id,
+                    "tenant_id": tenant_id,
+                    "entity_id": entity_id,
+                    "conflicting_roles": [role_a, role_b],
+                    "severity": "Critical",
+                    "description": (
+                        f"User '{user_id}' holds both '{role_a}' and "
+                        f"'{role_b}' — an incompatible role combination "
+                        f"that eliminates independent review of "
+                        f"transactions processed under these roles."
+                    ),
+                })
+
+        return conflicts
