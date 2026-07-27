@@ -18,7 +18,7 @@ Built by David Santillo, CPA | Founder, RTCM Platform LLC
 | Business model and go-to-market strategy |  Complete — June 21, 2026 |
 | Extended GL controls (GL-004, GL-005) |  Complete — June 28, 2026 |
 | Unit test suite — extended GL controls |  Complete — July 5, 2026 |
-| SOD controls (SOD-001, SOD-002) |  In progress — July 2026 |
+| SOD controls (SOD-001, SOD-002) |  Complete — July 2026 |
 | Intercompany controls (IC-001, IC-002) |  Planned — September 2026 |
 | Reconciliation controls (REC-001, REC-002) |  Planned — November 2026 |
 | Pilot program launch |  Planned — Q4 2026 |
