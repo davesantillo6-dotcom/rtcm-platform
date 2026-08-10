@@ -17,7 +17,7 @@ The architecture prioritizes:
 - **Horizontal scalability** — GL transaction volumes vary widely; the processing layer must scale without degrading performance
 - **Extensibility** — new ERP connectors and control tests must be addable without core system changes
 - **Auditability of the platform itself** — metadata about every control evaluation must be retained for regulatory review
-
+- 
 ---
 
 ## 2. High-Level Architecture
