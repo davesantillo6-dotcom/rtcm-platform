@@ -134,7 +134,7 @@ The roadmap reflects a deliberate sequencing: build the data pipeline and core c
 | Phase 1 | 1–2 | Founder + contract backend engineer |
 | Phase 2 | 2–3 | + contract frontend engineer |
 | Phase 3 | 3–4 | + part-time data scientist |
-| Phase 4 | 5–6 | First full-time hires (engineer + customer success) |
+| Phase 4 | 5–10 | First full-time hires (engineer + customer success) |
 
 ---
 
