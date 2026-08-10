@@ -174,7 +174,6 @@ CREATE POLICY entity_scope ON journal_entries
         )
     );
 ```
-
 ---
 
 *Full DDL scripts are located in /scripts/migrations/. Schema migrations are managed with Alembic.*
