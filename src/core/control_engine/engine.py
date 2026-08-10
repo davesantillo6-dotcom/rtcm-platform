@@ -48,7 +48,6 @@ class ControlTrigger(str, Enum):
     PERIODIC = "periodic"        # Evaluated on a schedule (daily, monthly)
     CONFIGURATION = "configuration"  # Evaluated when system config changes
 
-
 # ---------------------------------------------------------------------------
 # Data Models
 # ---------------------------------------------------------------------------
